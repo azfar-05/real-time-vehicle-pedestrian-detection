@@ -5,13 +5,27 @@ from ultralytics import YOLO
 # Load YOLOv8 model
 model = YOLO("yolov8n.pt")
 
-# Open webcam
-cap = cv2.VideoCapture(0)
+# Open video file
+cap = cv2.VideoCapture("videos/traffic.mp4")
 
 # Safety check
 if not cap.isOpened():
-    print("Error: Could not open webcam.")
+    print("Error: Could not open video.")
     exit()
+
+# Get video dimensions
+frame_width = int(cap.get(3))
+frame_height = int(cap.get(4))
+
+# Output video writer
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+
+out = cv2.VideoWriter(
+    'outputs/output.avi',
+    fourcc,
+    20.0,
+    (frame_width, frame_height)
+)
 
 # Target classes
 target_classes = ["person", "car", "bus", "truck", "motorcycle"]
@@ -20,10 +34,11 @@ target_classes = ["person", "car", "bus", "truck", "motorcycle"]
 prev_time = 0
 
 while True:
+
     success, frame = cap.read()
 
     if not success:
-        print("Failed to read frame.")
+        print("Finished processing video.")
         break
 
     # Run YOLO inference
@@ -34,6 +49,7 @@ while True:
     vehicle_count = 0
 
     for result in results:
+
         boxes = result.boxes
 
         for box in boxes:
@@ -44,29 +60,29 @@ while True:
             # Class name
             class_name = model.names[cls_id]
 
-            # Filter classes
+            # Filter unwanted classes
             if class_name not in target_classes:
                 continue
 
             # Confidence score
             confidence = float(box.conf[0])
 
-            # Confidence filtering
-            if confidence < 0.5:
+            # Confidence threshold
+            if confidence < 0.6:
                 continue
 
-            # Counting
+            # Count objects + set colors
             if class_name == "person":
                 people_count += 1
-                color = (0, 255, 0)  # Green
+                color = (0, 255, 0)   # Green
             else:
                 vehicle_count += 1
-                color = (255, 0, 0)  # Blue
+                color = (255, 0, 0)   # Blue
 
             # Bounding box coordinates
             x1, y1, x2, y2 = map(int, box.xyxy[0])
 
-            # Draw rectangle
+            # Draw bounding box
             cv2.rectangle(
                 frame,
                 (x1, y1),
@@ -129,7 +145,10 @@ while True:
         2
     )
 
-    # Show output window
+    # Save processed frame
+    out.write(frame)
+
+    # Show output
     cv2.imshow(
         "Real-Time Vehicle and Pedestrian Detection",
         frame
@@ -141,4 +160,5 @@ while True:
 
 # Cleanup
 cap.release()
+out.release()
 cv2.destroyAllWindows()
