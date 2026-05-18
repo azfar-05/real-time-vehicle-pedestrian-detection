@@ -33,15 +33,24 @@ The system can process webcam feeds or recorded traffic videos and save processe
 
 ## Project Structure
 
+```text
 vehicle-pedestrian-detection/
 │
 ├── videos/
+│   └── traffic.mp4
+│
 ├── outputs/
+│   └── output.avi
+│
 ├── screenshots/
+│   ├── detection1.png
+│   └── detection2.png
+│
 ├── main.py
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+```
 
 ---
 
