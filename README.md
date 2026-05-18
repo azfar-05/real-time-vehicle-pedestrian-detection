@@ -38,13 +38,14 @@ vehicle-pedestrian-detection/
 │
 ├── videos/
 │   └── traffic.mp4
+│   └── traffic2.mp4
 │
 ├── outputs/
 │   └── output.avi
 │
 ├── screenshots/
-│   ├── detection1.png
-│   └── detection2.png
+│   ├── screenshot1.png
+│   └── screenshot2.png
 │
 ├── main.py
 ├── requirements.txt
