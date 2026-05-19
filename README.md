@@ -60,7 +60,7 @@ vehicle-pedestrian-detection/
 Clone the repository:
 
 ```bash
-git clone <your-repo-link>
+git clone https://github.com/azfar-05/real-time-vehicle-pedestrian-detection.git
 cd vehicle-pedestrian-detection
 ```
 Create a virtual environment:
